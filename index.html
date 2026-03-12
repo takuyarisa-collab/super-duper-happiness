@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AI TACTICAL SIMULATOR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── ATMOSPHERIC LAYERS ── -->
+<div class="bg-layer"></div>
+<div class="bg-grid"></div>
+<div class="scanlines"></div>
+
+<!-- ══════════════════════════════════
+     BOOT SCREEN
+══════════════════════════════════ -->
+<div id="screen-boot" class="screen active">
+  <div class="boot-hex">
+    <svg viewBox="0 0 80 80" fill="none">
+      <polygon points="40,4 72,22 72,58 40,76 8,58 8,22" stroke="rgba(212,175,55,.5)" stroke-width="1.5" fill="rgba(212,175,55,.04)"/>
+      <polygon points="40,14 62,27 62,53 40,66 18,53 18,27" stroke="rgba(212,175,55,.2)" stroke-width=".8" fill="none"/>
+    </svg>
+    <span class="boot-hex-icon">⬡</span>
+  </div>
+  <div class="boot-title">AI <span>TACTICAL</span></div>
+  <div class="boot-sub">SIMULATOR — PROMPT WARFARE SYSTEM</div>
+  <div class="boot-bar-wrap"><div class="boot-bar" id="boot-bar"></div></div>
+  <div class="boot-log" id="boot-log">INITIALIZING...</div>
+</div>
+
+<!-- ══════════════════════════════════
+     HOME
+══════════════════════════════════ -->
+<div id="screen-home" class="screen">
+  <div class="home-hero">
+    <div class="hero-eyebrow">EXECUTIVE COMMAND CENTER</div>
+    <div class="home-hex">
+      <svg viewBox="0 0 64 64" fill="none">
+        <polygon class="home-hex-spin" points="32,3 59,18 59,46 32,61 5,46 5,18" stroke="rgba(212,175,55,.3)" stroke-width="1" fill="rgba(212,175,55,.03)"/>
+        <polygon points="32,12 52,23 52,41 32,52 12,41 12,23" stroke="rgba(212,175,55,.18)" stroke-width=".7" fill="none"/>
+      </svg>
+      <span class="home-hex-icon">⬡</span>
+    </div>
+    <div class="home-title">AI <span class="accent">TACTICAL</span><br>SIMULATOR</div>
+    <div class="home-tagline">PROMPT ENGINEERING WARFARE</div>
+  </div>
+
+  <div class="home-stats">
+    <div class="stat-card">
+      <div class="s-label">MISSIONS CLEAR</div>
+      <div class="s-val" id="stat-clear">0</div>
+      <div class="s-unit">/ 10 STAGES</div>
+      <div class="prog-wrap"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">AVG SCORE</div>
+      <div class="s-val" id="stat-avg">—</div>
+      <div class="s-unit">POINTS</div>
+    </div>
+    <div class="stat-card wide">
+      <div class="s-label">BEST RESULT</div>
+      <div class="s-val dim" id="stat-best">NO RECORD</div>
+      <div class="s-unit" id="stat-best-sub">まだ記録がありません</div>
+    </div>
+  </div>
+
+  <div id="last-result-box" class="last-result" style="display:none">
+    <div class="lr-label">◈ LAST MISSION RESULT</div>
+    <div class="lr-body" id="last-result-body"></div>
+  </div>
+
+  <!-- History -->
+  <div class="history-panel" id="history-panel" style="display:none">
+    <div class="history-header" onclick="toggleHistory()">
+      <span class="history-title">◈ MISSION HISTORY</span>
+      <span class="history-toggle" id="hist-toggle">▼</span>
+    </div>
+    <div class="history-body" id="hist-body"></div>
+  </div>
+
+  <div class="sys-bar">
+    <div class="sys-dot-wrap">
+      <div class="sys-dot"></div>
+      <span class="sys-text">SYSTEM ONLINE</span>
+    </div>
+    <span class="sys-text" id="sys-stage-info">STAGE 01 / UNLOCKED</span>
+    <span class="sys-text" style="color:var(--sub2)">v2.2.0</span>
+  </div>
+
+  <div class="home-cta">
+    <button class="start-btn" onclick="goTo('screen-mission','right')">
+      <span class="start-btn-main">▶ MISSION SELECT</span>
+      <span class="start-btn-sub">任務を選択する</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MISSION SELECT
+══════════════════════════════════ -->
+<div id="screen-mission" class="screen">
+  <div class="mission-topbar">
+    <button class="back-btn" onclick="goTo('screen-home','left')">← HOME</button>
+    <span class="tag">MISSION SELECT</span>
+  </div>
+  <div class="mission-head">
+    <div class="mission-h2">任務を<span>選択</span>せよ</div>
+    <div class="mission-desc">最適なプロンプトを構築し、AIの回答品質を最大化しろ。<br>27通りのコンボを制覇した者だけが次のステージへ進む。</div>
+  </div>
+
+  <div class="stage-list" id="stage-list">
+    <!-- Stage cards rendered by JS -->
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SIMULATOR
+══════════════════════════════════ -->
+<div id="screen-sim" class="screen">
+  <div class="sim-topbar">
+    <button class="back-btn" onclick="goTo('screen-mission','left')">← MISSIONS</button>
+    <div class="sim-stage-info">
+      <div class="sim-stage-tag"><span class="tag" id="sim-stage-tag">STAGE 01</span></div>
+      <div class="sim-title">AI <span>TACTICAL</span> SIM</div>
+    </div>
+  </div>
+  <div class="divider divider-sim"></div>
+
+  <div class="sim-body">
+    <div class="original-box">
+      <div class="orig-label" id="sim-orig-label">ORIGINAL TEXT — 改善前の文</div>
+      <div class="orig-text" id="sim-orig-text">「すみません、資料遅れます。明日出します。」</div>
+    </div>
+
+    <div id="form-area">
+      <div class="selector-group">
+        <div class="selector-label">STANCE <span class="lbl-sub">思考の型</span></div>
+        <div class="card-row" id="row-role">
+          <div class="choice-card" role="button" tabindex="0" data-group="role" data-val="A1" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">🧊</span><span class="c-name">冷徹</span><span class="c-sub">COLD</span>
+          </div>
+          <div class="choice-card" role="button" tabindex="0" data-group="role" data-val="A2" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">🔥</span><span class="c-name">情熱</span><span class="c-sub">PASSION</span>
+          </div>
+          <div class="choice-card" role="button" tabindex="0" data-group="role" data-val="A3" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">🔮</span><span class="c-name">知性</span><span class="c-sub">INTELLECT</span>
+          </div>
+        </div>
+      </div>
+      <div class="selector-group">
+        <div class="selector-label">SITUATION <span class="lbl-sub">当面の課題</span></div>
+        <div class="card-row" id="row-ctx">
+          <div class="choice-card" role="button" tabindex="0" data-group="ctx" data-val="B1" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">⏳</span><span class="c-name">期限交渉</span><span class="c-sub">DEADLINE</span>
+          </div>
+          <div class="choice-card" role="button" tabindex="0" data-group="ctx" data-val="B2" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">🙇</span><span class="c-name">謝罪</span><span class="c-sub">APOLOGY</span>
+          </div>
+          <div class="choice-card" role="button" tabindex="0" data-group="ctx" data-val="B3" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">🪞</span><span class="c-name">内省・整理</span><span class="c-sub">REFLECT</span>
+          </div>
+        </div>
+      </div>
+      <div class="selector-group" style="margin-bottom:0">
+        <div class="selector-label">STRATEGY <span class="lbl-sub">攻略の制約</span></div>
+        <div class="card-row" id="row-cst">
+          <div class="choice-card" role="button" tabindex="0" data-group="cst" data-val="C1" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">📐</span><span class="c-name">3ステップ</span><span class="c-sub">STEPS</span>
+          </div>
+          <div class="choice-card" role="button" tabindex="0" data-group="cst" data-val="C2" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">🎯</span><span class="c-name">弱点指摘</span><span class="c-sub">WEAKNESS</span>
+          </div>
+          <div class="choice-card" role="button" tabindex="0" data-group="cst" data-val="C3" onclick="selectCard(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCard(this)}">
+            <span class="c-icon">💡</span><span class="c-name">共感訴求</span><span class="c-sub">EMPATHY</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-wrap">
+        <div class="prompt-box" id="prompt-box">
+          <div class="prompt-header">
+            <span class="prompt-title">⬡ CURRENT PROMPT — 構築中の指示</span>
+            <span class="prompt-status" id="prompt-status">INCOMPLETE</span>
+          </div>
+          <div class="prompt-body">
+            <div class="prompt-line"><span class="pl-key">[System]</span><span class="pl-colon">:</span><span id="pl-role" class="pl-empty">未選択…</span></div>
+            <div class="prompt-line"><span class="pl-key">[Context]</span><span class="pl-colon">:</span><span id="pl-ctx" class="pl-empty">未選択…</span></div>
+            <div class="prompt-line"><span class="pl-key">[Constraint]</span><span class="pl-colon">:</span><span id="pl-cst" class="pl-empty">未選択…</span></div>
+            <div class="prompt-cmd" id="prompt-cmd">
+              <span class="cmd-bracket">[命令]：</span><span id="cmd-pre1">以下のダメな回答を、</span><span id="cmd-role" class="cmd-empty-var">{STANCE}</span><span id="cmd-pre2">な語気で、</span><span id="cmd-ctx" class="cmd-empty-var">{SITUATION}</span><span id="cmd-pre3">の文脈に基づき、</span><span id="cmd-cst" class="cmd-empty-var">{STRATEGY}</span><span id="cmd-post">というルールで修正せよ。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="run-btn" id="run-btn" disabled onclick="runAnalysis()">
+        <span class="btn-main"><span class="btn-icon">⬡</span> EXECUTE SIMULATION</span>
+        <span class="btn-sub">シミュレーション実行</span>
+      </button>
+    </div>
+
+    <div id="thinking"><span id="think-text"></span><span class="cursor"></span></div>
+
+    <div id="result">
+      <div class="score-header">
+        <div>
+          <div class="score-label">SIMULATION SCORE</div>
+          <div class="score-value"><span class="score-big" id="score-num">0</span><span class="score-max">/ 100</span></div>
+          <div class="gauge-track"><div class="gauge-fill" id="gauge-fill"></div></div>
+          <div class="gauge-labels"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+        </div>
+        <div class="rank-stamp" id="rank-stamp"></div>
+      </div>
+      <div class="combo-label" id="combo-label"></div>
+      <div class="compare-label">◈ PROMPT COMPARISON — 効果の対比</div>
+      <div class="no-prompt-box">
+        <div class="bp-tag">✕ NO PROMPT — AIへの丸投げ</div>
+        <div class="bp-inst" id="no-prompt-inst">▷ 指示：「いい感じに修正して」</div>
+        <div class="bp-answer" id="no-prompt-answer">「すみません、資料の提出が遅れます。明日お渡しいたします。」</div>
+        <div class="bp-eval" id="no-prompt-eval">⚠ 評価：平凡。原因・代替案・期限の明示なし。相手に不安を与えるリスクあり。</div>
+      </div>
+      <div class="with-prompt-box">
+        <div class="bp-tag">✔ WITH YOUR TACTICAL PROMPT — 戦略指示あり</div>
+        <div class="bp-inst" id="with-inst">▷ 指示：構築中…</div>
+        <div class="bp-answer" id="result-text"></div>
+      </div>
+      <div class="feedback-box" id="feedback-box">
+        <div class="box-label" id="fb-label">TACTICAL FEEDBACK — なぜ②が優れているのか</div>
+        <div class="fb-body" id="fb-text"></div>
+        <div class="fb-points" id="fb-points"></div>
+      </div>
+      <button class="copy-prompt-btn" id="copy-prompt-btn" onclick="handleCopyPrompt()">
+        <span id="copy-btn-icon">⚡</span>
+        <span id="copy-btn-text">戦術プロンプトをコピーする</span>
+      </button>
+      <button class="share-btn" id="share-btn"><span style="font-weight:900;font-size:18px">𝕏</span> 結果をポストする</button>
+      <button class="retry-btn" onclick="resetSim()">↩ RE-SIMULATE — 再シミュレーション</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Overlay -->
+<div id="ad-overlay">
+  <div class="ad-box">
+    <div class="ad-icon" id="ad-icon">⚙️</div>
+    <div class="ad-title" id="ad-title">戦術データを抽出中...</div>
+    <div class="ad-sub" id="ad-sub">広告読み込み中。しばらくお待ちください。<br>完了後、プロンプトが自動コピーされます。</div>
+    <div class="ad-bar-wrap"><div class="ad-bar" id="ad-bar"></div></div>
+    <div class="ad-timer" id="ad-timer">3秒後に解放...</div>
+  </div>
+</div>
+
+<!-- Stage Eyecatch Overlay -->
+<div id="eyecatch-overlay">
+  <div class="ec-wipe"></div>
+  <div class="ec-line ec-line-top"></div>
+  <div class="ec-stage" id="ec-stage-num">STAGE 03</div>
+  <div class="ec-title" id="ec-title-text">沈黙の会議室</div>
+  <div class="ec-sub" id="ec-sub-text">SILENCE OF THE BOARDROOM</div>
+  <div class="ec-line ec-line-bot"></div>
+</div>
+
+<!-- Unlock Toast -->
+<div class="unlock-toast" id="unlock-toast">
+  <span class="ut-icon">🔓</span>
+  <div class="ut-text">
+    <div class="ut-label">STAGE UNLOCKED</div>
+    <div class="ut-title" id="ut-title">新しいミッションが解放された</div>
+  </div>
+</div>
+
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
