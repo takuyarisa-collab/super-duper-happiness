@@ -656,8 +656,60 @@ async function showResult(role,ctx,cst){
   }
 
   const {roleShort:rs,ctxShort:cs,cstShort:ss}=meta;
-  const txt=data?'【AI Tactical Simulator】\n'+rs[role]+' × '+cs[ctx]+' × '+ss[cst]+'\nScore: '+data.score+'点 ('+data.rank+' RANK)\n#AIプロンプト #TacticalSimulator':'【AI Tactical Simulator】\n#AIプロンプト';
-  document.getElementById('share-btn').onclick=()=>window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(txt),'_blank');
+
+  // ── ドラマチックシェア文生成 ──
+  function buildShareText(data, role, ctx, cst){
+    if(!data) return '【AI Tactical Simulator】\n戦場に降り立て。\nhttps://aitacticalsim.replit.app\n#AIプロンプト #TacticalSimulator';
+
+    const titleMap = {
+      S: '黄金の精神',
+      A: '戦場の賢者',
+      B: '覚醒前夜',
+      C: '再起不能'
+    };
+    const declarationMap = {
+      S: '絶対に、屈しない。',
+      A: '策略は、すべて読んでいた。',
+      B: '次の一手で、覚醒する。',
+      C: '敗北から、すべては始まる。'
+    };
+
+    const title = titleMap[data.rank] || '未知の戦士';
+    const declaration = declarationMap[data.rank] || '';
+    const sc = data.score;
+
+    // スター評価を生成（論理性・熱量・実用性）
+    function toStars(val, max5){
+      const filled = Math.round(val / 20);
+      return '★'.repeat(filled) + '☆'.repeat(5 - filled);
+    }
+    // ランクに応じたスコア配分（合計がscoreに近くなるよう調整）
+    const rankOffset = {S:15, A:5, B:-5, C:-15};
+    const offset = rankOffset[data.rank] || 0;
+    const logicScore  = Math.min(100, Math.max(0, sc + offset + Math.round((Math.sin(sc*0.3)*10))));
+    const heatScore   = Math.min(100, Math.max(0, sc + offset + Math.round((Math.cos(sc*0.4)*8))));
+    const utilScore   = Math.min(100, Math.max(0, sc + offset + Math.round((Math.sin(sc*0.2)*12))));
+
+    const combo = rs[role]+' × '+cs[ctx]+' × '+ss[cst];
+
+    return (
+      '【⚔ AI TACTICAL SIMULATOR ⚔】\n' +
+      '━━━━━━━━━━━━━━━━\n' +
+      '称号：「'+title+'」\n' +
+      data.rank+' RANK　'+sc+' pts\n' +
+      '━━━━━━━━━━━━━━━━\n' +
+      '論理性 '+toStars(logicScore)+'\n' +
+      '熱　量 '+toStars(heatScore)+'\n' +
+      '実用性 '+toStars(utilScore)+'\n' +
+      '━━━━━━━━━━━━━━━━\n' +
+      '戦術：'+combo+'\n' +
+      '"'+declaration+'"\n' +
+      '#AIプロンプト #TacticalSimulator #プロンプト戦術'
+    );
+  }
+
+  const shareTxt = buildShareText(data, role, ctx, cst);
+  document.getElementById('share-btn').onclick=()=>window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(shareTxt),'_blank');
 }
 
 // ════════════════════════════════════════

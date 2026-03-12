@@ -816,8 +816,39 @@ body.jojo-theme .ad-title{color:#ffea00;}
 body.jojo-theme .ad-bar{background:linear-gradient(90deg,#c8a000,#ffea00,#fffacc);}
 .ad-timer{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--sub2);margin-top:8px;letter-spacing:.14em;}
 
-.share-btn:hover{background:rgba(29,155,240,.1)}
-.share-btn:active{transform:scale(.96)}
+@keyframes shareGlow{
+  0%,100%{box-shadow:0 0 8px rgba(212,175,55,.5),0 0 20px rgba(212,175,55,.2),inset 0 0 8px rgba(212,175,55,.05);}
+  50%{box-shadow:0 0 18px rgba(212,175,55,.9),0 0 40px rgba(212,175,55,.4),0 0 60px rgba(212,175,55,.15),inset 0 0 14px rgba(212,175,55,.1);}
+}
+@keyframes shareShimmer{
+  0%{background-position:-200% center;}
+  100%{background-position:200% center;}
+}
+.share-btn{
+  position:relative;
+  overflow:hidden;
+  animation:shareGlow 2.4s ease-in-out infinite;
+  border:1.5px solid rgba(212,175,55,.6) !important;
+  transition:all .25s ease;
+}
+.share-btn::before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;
+  width:60%;height:100%;
+  background:linear-gradient(120deg,transparent 0%,rgba(212,175,55,.35) 50%,transparent 100%);
+  animation:shareShimmer 2.8s linear infinite;
+  pointer-events:none;
+}
+.share-btn:hover{
+  background:linear-gradient(135deg,rgba(212,175,55,.18) 0%,rgba(255,215,0,.1) 100%) !important;
+  border-color:rgba(212,175,55,1) !important;
+  color:#ffd700 !important;
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 0 28px rgba(212,175,55,.8),0 0 60px rgba(212,175,55,.35),0 6px 20px rgba(0,0,0,.4) !important;
+  animation:none;
+}
+.share-btn:active{transform:scale(.97);box-shadow:0 0 10px rgba(212,175,55,.5) !important;}
 .retry-btn{width:100%;background:transparent;border:1px solid rgba(212,175,55,.18);color:rgba(212,175,55,.55);font-size:20px;border-radius:8px;padding:12px;cursor:pointer;margin-top:8px;letter-spacing:.16em;transition:all .2s;font-family:'Share Tech Mono',monospace}
 .retry-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,.03)}
 .retry-btn:active{transform:scale(.96)}
