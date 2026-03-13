@@ -926,3 +926,44 @@ body.jojo-theme .ad-bar{background:linear-gradient(90deg,#c8a000,#ffea00,#fffacc
 
 /* rank colors utility */
 .rank-s{color:var(--s-color)} .rank-a{color:var(--a-color)} .rank-b{color:var(--b-color)} .rank-c{color:var(--c-color)}
+
+/* Amazon unlock button */
+.amazon-unlock-area{text-align:center;padding:24px 16px 8px}
+.amazon-unlock-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,rgba(255,153,0,.12),rgba(255,200,50,.06));
+  border:1.5px solid rgba(255,153,0,.45);
+  color:#ffb84d;font-family:'Noto Sans JP',sans-serif;font-weight:700;
+  font-size:clamp(14px,3.6vw,17px);letter-spacing:.06em;
+  padding:16px 28px;border-radius:12px;cursor:pointer;
+  transition:all .25s ease;
+  box-shadow:0 0 20px rgba(255,153,0,.12),0 4px 16px rgba(0,0,0,.3);
+  animation:amazonPulse 2.5s ease-in-out infinite;
+}
+.amazon-unlock-btn:hover{
+  border-color:rgba(255,153,0,.8);color:#ffd280;
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 0 32px rgba(255,153,0,.3),0 6px 24px rgba(0,0,0,.4);
+  animation:none;
+}
+.amazon-unlock-btn:active{transform:scale(.97)}
+.amazon-btn-icon{font-size:24px}
+.amazon-btn-text{line-height:1.4}
+@keyframes amazonPulse{
+  0%,100%{box-shadow:0 0 20px rgba(255,153,0,.12),0 4px 16px rgba(0,0,0,.3)}
+  50%{box-shadow:0 0 30px rgba(255,153,0,.25),0 4px 20px rgba(0,0,0,.3)}
+}
+
+/* Footer */
+.site-footer{
+  text-align:center;padding:32px 16px 20px;
+  border-top:1px solid rgba(212,175,55,.08);
+  margin-top:24px;
+}
+.footer-link{
+  color:rgba(148,163,184,.4);font-size:11px;
+  text-decoration:none;letter-spacing:.08em;
+  font-family:'Noto Sans JP',sans-serif;
+  transition:color .2s;
+}
+.footer-link:hover{color:rgba(212,175,55,.6)}

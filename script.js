@@ -196,7 +196,7 @@ function renderStages(){
   const cleared = appState.clearedStages.length;
   const list = document.getElementById('stage-list');
   list.innerHTML = STAGES.map(st=>{
-    // Stage 3 はシェアでのみ解放
+    // Stage 3 はAmazon連動でのみ解放
     if(st.id === 3 && !isJojoUnlocked()){
       return `
       <div class="stage-card jojo-locked" onclick="tryStartJojoStage()">
@@ -206,8 +206,8 @@ function renderStages(){
         </div>
         <div class="sc-title jojo-lock-title">？？？</div>
         <div class="sc-desc jojo-lock-desc">この先は、覚悟を示した者だけが踏み込める領域だ。</div>
-        <div class="sc-chips"><span class="sc-chip jojo-lock-chip">🔒 シェアで解放</span></div>
-        <div class="sc-arrow jojo-lock-arrow">▶ SHARE TO UNLOCK</div>
+        <div class="sc-chips"><span class="sc-chip jojo-lock-chip">📖 知恵を得て解放</span></div>
+        <div class="sc-arrow jojo-lock-arrow">▶ UNLOCK WITH KNOWLEDGE</div>
       </div>`;
     }
     const unlocked = (st.id === 3 && isJojoUnlocked()) ? true : (st.unlockThreshold <= cleared);
@@ -246,6 +246,17 @@ function renderStages(){
       </div>`;
     }
   }).join('');
+
+  const amazonArea = document.getElementById('amazon-unlock-area');
+  if(amazonArea){
+    amazonArea.style.display = isJojoUnlocked() ? 'none' : 'block';
+  }
+}
+
+function openAmazonAndUnlock(){
+  window.open('https://www.amazon.co.jp/', '_blank', 'noopener,noreferrer');
+  storage.setItem('jojo_unlocked','true');
+  showJojoUnlock();
 }
 
 function startStage(id){
@@ -266,9 +277,8 @@ function tryStartJojoStage(){
     startStage(3);
     return;
   }
-  // ロックメッセージを表示
   const el = document.createElement('div');
-  el.textContent = 'まだ「覚悟」が足りないようだ…\n（シェアして解放）';
+  el.textContent = 'まだ「覚悟」が足りないようだ…\n（Amazonで知識を得て解放）';
   el.style.cssText = [
     'position:fixed','top:50%','left:50%',
     'transform:translate(-50%,-50%) scale(0)',
@@ -570,18 +580,19 @@ function showJojoUnlock(){
   setTimeout(()=>flash.remove(), 1100);
 
   // ドラマチックテキスト
-  const lines = ['STAGE 3', '解放ッ！', '黄金の精神が\nアンロックされたッ！'];
+  const lines = ['STAGE 3', '解放ッ！', 'あ、ありのまま\n今起こったことを話すぜ…', '隠しステージが\n現れたんだ…'];
+  const tops = [20, 38, 56, 74];
+  const sizes = ['clamp(36px,10vw,60px)', 'clamp(44px,12vw,72px)', 'clamp(16px,4vw,24px)', 'clamp(16px,4vw,24px)'];
   lines.forEach((msg, i) => {
     setTimeout(()=>{
       const el = document.createElement('div');
       el.textContent = msg;
       const isTitle = i === 0;
-      const isSub = i === 2;
       el.style.cssText = [
-        'position:fixed', `top:${32 + i*20}%`, 'left:50%',
+        'position:fixed', `top:${tops[i]}%`, 'left:50%',
         'transform:translate(-50%,-50%) scale(0) rotate('+(i%2===0?'-':'')+'4deg)',
         'font-family:"Noto Sans JP",sans-serif', 'font-weight:900',
-        `font-size:${isTitle?'clamp(36px,10vw,60px)':isSub?'clamp(18px,5vw,28px)':'clamp(44px,12vw,72px)'}`,
+        `font-size:${sizes[i]}`,
         `color:${isTitle?'rgba(212,175,55,.9)':'#ffea00'}`,
         `-webkit-text-stroke:${isTitle?'3':'4'}px #000`,
         `text-shadow:4px 4px 0 #000,0 0 ${isTitle?30:60}px rgba(212,175,55,.9)`,
@@ -595,7 +606,7 @@ function showJojoUnlock(){
       }));
       setTimeout(()=>{ el.style.opacity = '0'; }, 1400);
       setTimeout(()=>el.remove(), 2000);
-    }, i * 220);
+    }, i * 280);
   });
 
   // ステージリストを更新してアンロック表示
@@ -801,10 +812,7 @@ async function showResult(role,ctx,cst){
 
   const shareTxt = buildShareText(data, role, ctx, cst);
   document.getElementById('share-btn').onclick=()=>{
-    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(shareTxt),'_blank');
-    if(!isJojoUnlocked()){
-      setTimeout(()=>showJojoUnlock(), 600);
-    }
+    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(shareTxt),'_blank','noopener,noreferrer');
   };
 }
 
