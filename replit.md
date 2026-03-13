@@ -7,7 +7,7 @@ A static web application — an AI Tactical Simulator / Prompt Warfare System. B
 - `index.html` — Main HTML entry point
 - `style.css` — All styles
 - `script.js` — Application logic
-- `data.js` — Game/simulation data (PUZZLE_DATA, STAGE2_DATA, STAGE3_DATA, STAGE4_DATA, EXTRA_DATA, STAGES array)
+- `data.js` — Game/simulation data (PUZZLE_DATA, STAGE2_DATA, STAGE3_DATA, STAGE4_DATA, STAGE5_DATA, EXTRA_DATA, STAGES array)
 - `server.js` — Simple Node.js HTTP static file server
 - `privacy.html` — Privacy policy page (Amazon Associates disclosure)
 - `og-image.png` — OGP card image for social sharing
@@ -22,12 +22,13 @@ A static web application — an AI Tactical Simulator / Prompt Warfare System. B
 - Japanese language UI
 
 ## Key Features
-- Stage-based puzzle system (4 regular stages + 1 bonus Extra Stage)
+- Stage-based puzzle system (5 regular stages + 1 bonus Extra Stage)
   - Stage 1 (id:1): 納期遅延の報告 — deadline pressure (unlockThreshold:0)
   - Stage 2 (id:2): 理不尽な値引きへの対応 — negotiation warfare (unlockThreshold:1)
   - Stage 3 (id:3): 怒れるクライアントの炎上メール — crisis management (unlockThreshold:2)
   - Stage 4 (id:4): エース社員の退職を引き止めろ — retention warfare (unlockThreshold:3)
-  - Extra (id:5): 沈黙の会議室 — JoJo-themed bonus stage (bonus:true, unlockThreshold:4)
+  - Stage 5 (id:5): 伸び悩む新人の育成面談 — rookie development (unlockThreshold:4)
+  - Extra (id:6): 沈黙の会議室 — JoJo-themed bonus stage (bonus:true, unlockThreshold:5)
 - Each stage has 27 patterns (3×3×3 combination system)
 - Extra Stage unlock via Amazon link click (localStorage `jojo_unlocked`)
 - Dramatic ジョジョ-style unlock animation
@@ -41,12 +42,13 @@ A static web application — an AI Tactical Simulator / Prompt Warfare System. B
 - id:2 → STAGE2_DATA
 - id:3 → STAGE3_DATA
 - id:4 → STAGE4_DATA
-- id:5 → EXTRA_DATA
+- id:5 → STAGE5_DATA
+- id:6 → EXTRA_DATA
 
 ## Key Logic
-- `isJojo` context = `id === 5` (JoJo theme CSS class on body)
+- `isJojo` context = `id === 6` (JoJo theme CSS class on body)
 - `isJojoUnlocked()` checks localStorage `jojo_unlocked`
-- `tryStartJojoStage()` calls `startStage(5)` when unlocked
+- `tryStartJojoStage()` calls `startStage(6)` when unlocked
 - `renderStages()` sorts regular stages first, bonus stages last
 - Amazon affiliate URL: `https://amzn.to/3PySSgo`
 

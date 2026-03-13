@@ -42,9 +42,10 @@ function loadStageUI(id){
   else if(id===2) currentStageData = STAGE2_DATA;
   else if(id===3) currentStageData = STAGE3_DATA;
   else if(id===4) currentStageData = STAGE4_DATA;
-  else if(id===5) currentStageData = EXTRA_DATA;
+  else if(id===5) currentStageData = STAGE5_DATA;
+  else if(id===6) currentStageData = EXTRA_DATA;
   // jojo-theme トグル
-  if(id===5) document.body.classList.add('jojo-theme');
+  if(id===6) document.body.classList.add('jojo-theme');
   else document.body.classList.remove('jojo-theme');
   const m = currentStageData.meta;
   // Stage tag
@@ -285,7 +286,7 @@ function startStage(id){
 
 function tryStartJojoStage(){
   if(isJojoUnlocked()){
-    startStage(5);
+    startStage(6);
     return;
   }
   const el = document.createElement('div');
@@ -317,7 +318,7 @@ function tryStartJojoStage(){
 // STAGE EYECATCH
 // ════════════════════════════════════════
 async function showEyecatch(id, stage, onDone){
-  const isJojo = id === 5;
+  const isJojo = id === 6;
   const ov = document.getElementById('eyecatch-overlay');
   const wipe = ov.querySelector('.ec-wipe');
   const stageEl = document.getElementById('ec-stage-num');
@@ -332,7 +333,8 @@ async function showEyecatch(id, stage, onDone){
     2:'NEGOTIATION WARFARE',
     3:'CRISIS MANAGEMENT',
     4:'RETENTION WARFARE',
-    5:'SILENCE OF THE BOARDROOM'
+    5:'ROOKIE DEVELOPMENT',
+    6:'SILENCE OF THE BOARDROOM'
   };
 
   stageEl.textContent = stage.bonus ? 'EXTRA STAGE' : 'STAGE 0'+id;
