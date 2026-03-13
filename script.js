@@ -254,7 +254,7 @@ function renderStages(){
 }
 
 function openAmazonAndUnlock(){
-  window.open('https://www.amazon.co.jp/', '_blank', 'noopener,noreferrer');
+  window.open('https://amzn.to/3PySSgo', '_blank', 'noopener,noreferrer');
   storage.setItem('jojo_unlocked','true');
   showJojoUnlock();
 }
