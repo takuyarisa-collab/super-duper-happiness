@@ -754,7 +754,7 @@ async function showResult(role,ctx,cst){
   copyBtn.classList.remove('done');
   document.getElementById('copy-btn-icon').textContent = isLocked ? '🔒' : '⚡';
   document.getElementById('copy-btn-text').textContent = isLocked
-    ? '🔒 戦術プロンプトをコピーする（広告を視聴）'
+    ? '🔒 戦術プロンプトをコピーする（📖で解放）'
     : '⚡ 戦術プロンプトをコピーする';
 
   // ジョジョSランク特別演出
@@ -955,8 +955,10 @@ function showAdOverlay(onComplete){
   document.getElementById('ad-icon').textContent  = isJojo ? '⚡' : '⚙️';
   document.getElementById('ad-title').textContent = isJojo ? '戦術データ抽出中...ゴゴゴゴ...' : '戦術データを抽出中...';
   document.getElementById('ad-sub').textContent   = isJojo
-    ? '広告読み込み中。覚悟はいいか？\n完了後、プロンプトが自動コピーされます。'
-    : '広告読み込み中。しばらくお待ちください。\n完了後、プロンプトが自動コピーされます。';
+    ? '聖なる知恵を授けよう…覚悟はいいか？\n完了後、プロンプトが自動コピーされます。'
+    : 'おすすめ本を確認中…\n完了後、プロンプトが自動コピーされます。';
+
+  window.open('https://amzn.to/3PySSgo', '_blank', 'noopener,noreferrer');
 
   // リセット→表示
   bar.style.transition='none'; bar.style.width='0%';
