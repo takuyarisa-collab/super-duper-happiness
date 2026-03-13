@@ -46,7 +46,8 @@ function loadStageUI(id){
   else document.body.classList.remove('jojo-theme');
   const m = currentStageData.meta;
   // Stage tag
-  document.getElementById('sim-stage-tag').textContent = 'STAGE 0'+id;
+  const stageData = STAGES.find(s=>s.id===id);
+  document.getElementById('sim-stage-tag').textContent = stageData && stageData.bonus ? 'BONUS STAGE' : 'STAGE 0'+id;
   // Original box
   document.getElementById('sim-orig-label').textContent = 'ORIGINAL TEXT — '+m.scenario;
   document.getElementById('sim-orig-text').textContent = m.originalText;
@@ -195,13 +196,21 @@ function renderHistory(){
 function renderStages(){
   const cleared = appState.clearedStages.length;
   const list = document.getElementById('stage-list');
-  list.innerHTML = STAGES.map(st=>{
-    // Stage 3 はAmazon連動でのみ解放
-    if(st.id === 3 && !isJojoUnlocked()){
+
+  const regularStages = STAGES.filter(st => !st.bonus);
+  const bonusStages = STAGES.filter(st => st.bonus);
+  const sortedStages = [...regularStages, ...bonusStages];
+
+  list.innerHTML = sortedStages.map(st=>{
+    const isBonus = !!st.bonus;
+    const stageLabel = isBonus ? 'BONUS' : `STAGE 0${st.id}`;
+
+    // ボーナスステージはAmazon連動でのみ解放
+    if(isBonus && !isJojoUnlocked()){
       return `
       <div class="stage-card jojo-locked" onclick="tryStartJojoStage()">
         <div class="sc-top">
-          <span class="sc-num jojo-lock-num">STAGE 03</span>
+          <span class="sc-num jojo-lock-num">BONUS</span>
           <span class="sc-badge badge-lock">🔒 SECRET</span>
         </div>
         <div class="sc-title jojo-lock-title">？？？</div>
@@ -210,7 +219,7 @@ function renderStages(){
         <div class="sc-arrow jojo-lock-arrow">▶ UNLOCK WITH KNOWLEDGE</div>
       </div>`;
     }
-    const unlocked = (st.id === 3 && isJojoUnlocked()) ? true : (st.unlockThreshold <= cleared);
+    const unlocked = (isBonus && isJojoUnlocked()) ? true : (st.unlockThreshold <= cleared);
     const hasClear = appState.clearedStages.includes(st.id);
     if(unlocked){
       const bestForStage = appState.scores.filter(r=>r.stage===st.id);
@@ -218,9 +227,9 @@ function renderStages(){
       const bestRank = bestForStage.length ? bestForStage.find(r=>r.score===bestScore)?.rank : null;
       const rankClass = {S:'rank-s',A:'rank-a',B:'rank-b',C:'rank-c'};
       return `
-      <div class="stage-card unlocked${hasClear?' ':' '}" onclick="startStage(${st.id})">
+      <div class="stage-card unlocked${isBonus?' bonus-card':''}" onclick="startStage(${st.id})">
         <div class="sc-top">
-          <span class="sc-num">STAGE 0${st.id}</span>
+          <span class="sc-num${isBonus?' bonus-num':''}">${stageLabel}</span>
           <span class="sc-badge ${hasClear?'badge-open':'badge-new'}">${hasClear?'✔ CLEARED':'▶ PLAYABLE'}</span>
         </div>
         <div class="sc-title">${st.title}</div>
@@ -237,7 +246,7 @@ function renderStages(){
       return `
       <div class="stage-card locked">
         <div class="sc-top">
-          <span class="sc-num" style="color:var(--sub2)">STAGE 0${st.id}</span>
+          <span class="sc-num" style="color:var(--sub2)">${stageLabel}</span>
           <span class="sc-badge badge-lock">🔒 LOCKED</span>
         </div>
         <div class="sc-title" style="color:var(--sub2)">${st.title}</div>
@@ -322,7 +331,7 @@ async function showEyecatch(id, stage, onDone){
     3:'SILENCE OF THE BOARDROOM'
   };
 
-  stageEl.textContent = 'STAGE 0'+id;
+  stageEl.textContent = stage.bonus ? 'BONUS STAGE' : 'STAGE 0'+id;
   titleEl.textContent = stage.title.replace(' — 黄金の精神 vs 漆黒の意志','').replace(' — ','\n');
   subEl.textContent   = subs[id] || '';
 
@@ -580,7 +589,7 @@ function showJojoUnlock(){
   setTimeout(()=>flash.remove(), 1100);
 
   // ドラマチックテキスト
-  const lines = ['STAGE 3', '解放ッ！', 'あ、ありのまま\n今起こったことを話すぜ…', '隠しステージが\n現れたんだ…'];
+  const lines = ['BONUS STAGE', '解放ッ！', 'あ、ありのまま\n今起こったことを話すぜ…', '隠しステージが\n現れたんだ…'];
   const tops = [20, 38, 56, 74];
   const sizes = ['clamp(36px,10vw,60px)', 'clamp(44px,12vw,72px)', 'clamp(16px,4vw,24px)', 'clamp(16px,4vw,24px)'];
   lines.forEach((msg, i) => {
@@ -613,7 +622,7 @@ function showJojoUnlock(){
   setTimeout(()=>{
     renderStages();
     // アンロックトーストを表示
-    showUnlockToast('STAGE 03 — 黄金の精神がアンロックされたッ！');
+    showUnlockToast('BONUS STAGE — 黄金の精神がアンロックされたッ！');
   }, 1600);
 }
 

@@ -238,7 +238,7 @@ const STAGE3_DATA = {
 const STAGES = [
   {id:1,title:"納期遅延の報告",desc:"資料の提出が遅れる。この一文を、AIへの戦術的指示で最高の謝罪文に変えろ。27通りの組み合わせに挑め。",patterns:27,maxScore:98,time:"~5 MIN",unlockThreshold:0},
   {id:2,title:"理不尽な値引きへの対応",desc:"「3割引いてくれ」という無茶な要求に、プロとしての交渉術を駆使して対処せよ。27通りのコンボを制覇しろ。",patterns:27,maxScore:96,time:"~5 MIN",unlockThreshold:1},
-  {id:3,title:"沈黙の会議室 — 黄金の精神 vs 漆黒の意志",desc:"カイロの夜。誰も発言しない重苦しい沈黙が支配する会議室。失敗すれば全員リタイアの瀬戸際。AIへの指示一つで場の空気を変えろ。",patterns:27,maxScore:99,time:"~5 MIN",unlockThreshold:2}
+  {id:3,title:"沈黙の会議室 — 黄金の精神 vs 漆黒の意志",desc:"カイロの夜。誰も発言しない重苦しい沈黙が支配する会議室。失敗すれば全員リタイアの瀬戸際。AIへの指示一つで場の空気を変えろ。",patterns:27,maxScore:99,time:"~5 MIN",unlockThreshold:2,bonus:true}
 ];
 
 // ════════════════════════════════════════
