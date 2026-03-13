@@ -693,18 +693,12 @@ async function showResult(role,ctx,cst){
     const combo = rs[role]+' × '+cs[ctx]+' × '+ss[cst];
 
     return (
-      '【⚔ AI TACTICAL SIMULATOR ⚔】\n' +
-      '━━━━━━━━━━━━━━━━\n' +
-      '称号：「'+title+'」\n' +
-      data.rank+' RANK　'+sc+' pts\n' +
-      '━━━━━━━━━━━━━━━━\n' +
-      '論理性 '+toStars(logicScore)+'\n' +
-      '熱　量 '+toStars(heatScore)+'\n' +
-      '実用性 '+toStars(utilScore)+'\n' +
-      '━━━━━━━━━━━━━━━━\n' +
-      '戦術：'+combo+'\n' +
+      '⚔ AI TACTICAL SIMULATOR ⚔\n' +
+      '称号「'+title+'」'+data.rank+' RANK '+sc+'pts\n' +
+      '論理'+toStars(logicScore)+' 熱量'+toStars(heatScore)+' 実用'+toStars(utilScore)+'\n' +
+      '['+combo+']\n' +
       '"'+declaration+'"\n' +
-      '#AIプロンプト #TacticalSimulator #プロンプト戦術'
+      '#AIプロンプト #TacticalSimulator'
     );
   }
 
