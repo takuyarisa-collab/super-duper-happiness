@@ -699,7 +699,9 @@ async function showResult(role,ctx,cst){
       '['+combo+']\n' +
       '"'+declaration+'"\n' +
       '#AIプロンプト #TacticalSimulator\n' +
-      window.location.origin
+      (window.location.origin && window.location.origin !== 'null'
+        ? window.location.origin
+        : window.location.href.split('?')[0].split('#')[0])
     );
   }
 
