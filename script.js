@@ -196,6 +196,16 @@ function renderHistory(){
 // ════════════════════════════════════════
 // STAGE LIST RENDER
 // ════════════════════════════════════════
+const STAGES_PER_PAGE = 5;
+let missionPage = 1;
+
+function getMissionPageCount(){
+  const regularStages = STAGES.filter(st => !st.bonus);
+  const bonusStages = STAGES.filter(st => st.bonus);
+  const sortedStages = [...regularStages, ...bonusStages];
+  return Math.ceil(sortedStages.length / STAGES_PER_PAGE);
+}
+
 function renderStages(){
   const cleared = appState.clearedStages.length;
   const list = document.getElementById('stage-list');
@@ -204,7 +214,14 @@ function renderStages(){
   const bonusStages = STAGES.filter(st => st.bonus);
   const sortedStages = [...regularStages, ...bonusStages];
 
-  list.innerHTML = sortedStages.map(st=>{
+  const totalPages = getMissionPageCount();
+  if(missionPage > totalPages) missionPage = totalPages;
+  if(missionPage < 1) missionPage = 1;
+
+  const startIdx = (missionPage - 1) * STAGES_PER_PAGE;
+  const pageStages = sortedStages.slice(startIdx, startIdx + STAGES_PER_PAGE);
+
+  list.innerHTML = pageStages.map(st=>{
     const isBonus = !!st.bonus;
     const stageLabel = isBonus ? 'EXTRA' : `STAGE 0${st.id}`;
 
@@ -259,10 +276,33 @@ function renderStages(){
     }
   }).join('');
 
+  const pagNav = document.getElementById('mission-page-nav');
+  if(pagNav){
+    const totalPages = getMissionPageCount();
+    if(totalPages <= 1){
+      pagNav.style.display = 'none';
+    } else {
+      pagNav.style.display = 'flex';
+      pagNav.innerHTML = `
+        <button class="page-btn${missionPage<=1?' page-btn-disabled':''}" onclick="changeMissionPage(-1)" ${missionPage<=1?'disabled':''}>← PREV</button>
+        <span class="page-indicator">${missionPage} / ${totalPages}</span>
+        <button class="page-btn${missionPage>=totalPages?' page-btn-disabled':''}" onclick="changeMissionPage(1)" ${missionPage>=totalPages?'disabled':''}>NEXT →</button>
+      `;
+    }
+  }
+
+  const hasBonusOnPage = pageStages.some(st => st.bonus);
   const amazonArea = document.getElementById('amazon-unlock-area');
   if(amazonArea){
-    amazonArea.style.display = isJojoUnlocked() ? 'none' : 'block';
+    amazonArea.style.display = (hasBonusOnPage && !isJojoUnlocked()) ? 'block' : 'none';
   }
+}
+
+function changeMissionPage(delta){
+  missionPage += delta;
+  renderStages();
+  const list = document.getElementById('stage-list');
+  if(list) list.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function openAmazonAndUnlock(){

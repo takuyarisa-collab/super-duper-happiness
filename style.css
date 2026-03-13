@@ -932,6 +932,29 @@ body.jojo-theme .ad-bar{background:linear-gradient(90deg,#c8a000,#ffea00,#fffacc
 .bonus-num{color:var(--gold) !important;letter-spacing:.14em}
 
 /* Amazon unlock button */
+.mission-page-nav{
+  display:flex;align-items:center;justify-content:center;gap:20px;
+  padding:20px 16px 8px;
+}
+.page-btn{
+  background:linear-gradient(135deg,var(--navy3),var(--navy2));
+  color:var(--gold);border:1px solid var(--gold3);
+  padding:10px 24px;border-radius:8px;cursor:pointer;
+  font-family:inherit;font-size:.85rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  transition:all .2s;
+}
+.page-btn:hover:not(:disabled){
+  background:linear-gradient(135deg,var(--gold3),var(--gold));
+  color:var(--navy);border-color:var(--gold);
+  box-shadow:0 0 16px rgba(212,175,55,.3);
+}
+.page-btn:active:not(:disabled){transform:scale(.96)}
+.page-btn-disabled{opacity:.3;cursor:default}
+.page-indicator{
+  color:var(--gold);font-size:.9rem;font-weight:700;
+  letter-spacing:.12em;min-width:60px;text-align:center;
+}
 .amazon-unlock-area{text-align:center;padding:24px 16px 8px}
 .amazon-unlock-btn{
   display:inline-flex;align-items:center;gap:12px;
