@@ -698,7 +698,8 @@ async function showResult(role,ctx,cst){
       '論理'+toStars(logicScore)+' 熱量'+toStars(heatScore)+' 実用'+toStars(utilScore)+'\n' +
       '['+combo+']\n' +
       '"'+declaration+'"\n' +
-      '#AIプロンプト #TacticalSimulator'
+      '#AIプロンプト #TacticalSimulator\n' +
+      window.location.origin
     );
   }
 
