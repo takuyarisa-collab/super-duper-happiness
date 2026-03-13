@@ -927,7 +927,7 @@ body.jojo-theme .ad-bar{background:linear-gradient(90deg,#c8a000,#ffea00,#fffacc
 /* rank colors utility */
 .rank-s{color:var(--s-color)} .rank-a{color:var(--a-color)} .rank-b{color:var(--b-color)} .rank-c{color:var(--c-color)}
 
-/* Bonus stage card */
+/* Extra stage card */
 .bonus-card{border-color:rgba(212,175,55,.35) !important}
 .bonus-num{color:var(--gold) !important;letter-spacing:.14em}
 

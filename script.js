@@ -47,7 +47,7 @@ function loadStageUI(id){
   const m = currentStageData.meta;
   // Stage tag
   const stageData = STAGES.find(s=>s.id===id);
-  document.getElementById('sim-stage-tag').textContent = stageData && stageData.bonus ? 'BONUS STAGE' : 'STAGE 0'+id;
+  document.getElementById('sim-stage-tag').textContent = stageData && stageData.bonus ? 'EXTRA STAGE' : 'STAGE 0'+id;
   // Original box
   document.getElementById('sim-orig-label').textContent = 'ORIGINAL TEXT — '+m.scenario;
   document.getElementById('sim-orig-text').textContent = m.originalText;
@@ -203,14 +203,14 @@ function renderStages(){
 
   list.innerHTML = sortedStages.map(st=>{
     const isBonus = !!st.bonus;
-    const stageLabel = isBonus ? 'BONUS' : `STAGE 0${st.id}`;
+    const stageLabel = isBonus ? 'EXTRA' : `STAGE 0${st.id}`;
 
     // ボーナスステージはAmazon連動でのみ解放
     if(isBonus && !isJojoUnlocked()){
       return `
       <div class="stage-card jojo-locked" onclick="tryStartJojoStage()">
         <div class="sc-top">
-          <span class="sc-num jojo-lock-num">BONUS</span>
+          <span class="sc-num jojo-lock-num">EXTRA</span>
           <span class="sc-badge badge-lock">🔒 SECRET</span>
         </div>
         <div class="sc-title jojo-lock-title">？？？</div>
@@ -331,7 +331,7 @@ async function showEyecatch(id, stage, onDone){
     3:'SILENCE OF THE BOARDROOM'
   };
 
-  stageEl.textContent = stage.bonus ? 'BONUS STAGE' : 'STAGE 0'+id;
+  stageEl.textContent = stage.bonus ? 'EXTRA STAGE' : 'STAGE 0'+id;
   titleEl.textContent = stage.title.replace(' — 黄金の精神 vs 漆黒の意志','').replace(' — ','\n');
   subEl.textContent   = subs[id] || '';
 
@@ -589,7 +589,7 @@ function showJojoUnlock(){
   setTimeout(()=>flash.remove(), 1100);
 
   // ドラマチックテキスト
-  const lines = ['BONUS STAGE', '解放ッ！', 'あ、ありのまま\n今起こったことを話すぜ…', '隠しステージが\n現れたんだ…'];
+  const lines = ['EXTRA STAGE', '解放ッ！', 'あ、ありのまま\n今起こったことを話すぜ…', '隠しステージが\n現れたんだ…'];
   const tops = [20, 38, 56, 74];
   const sizes = ['clamp(36px,10vw,60px)', 'clamp(44px,12vw,72px)', 'clamp(16px,4vw,24px)', 'clamp(16px,4vw,24px)'];
   lines.forEach((msg, i) => {
