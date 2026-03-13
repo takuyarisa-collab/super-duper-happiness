@@ -40,9 +40,10 @@ function loadStageUI(id){
   currentStageId = id;
   if(id===1) currentStageData = PUZZLE_DATA;
   else if(id===2) currentStageData = STAGE2_DATA;
-  else currentStageData = STAGE3_DATA;
+  else if(id===3) currentStageData = STAGE3_DATA;
+  else if(id===4) currentStageData = EXTRA_DATA;
   // jojo-theme トグル
-  if(id===3) document.body.classList.add('jojo-theme');
+  if(id===4) document.body.classList.add('jojo-theme');
   else document.body.classList.remove('jojo-theme');
   const m = currentStageData.meta;
   // Stage tag
@@ -272,7 +273,7 @@ function startStage(id){
   const stage = STAGES.find(s=>s.id===id);
   if(!stage) return;
   const cleared = appState.clearedStages.length;
-  if(stage.unlockThreshold > cleared && !(id === 3 && isJojoUnlocked())) return;
+  if(stage.unlockThreshold > cleared && !(stage.bonus && isJojoUnlocked())) return;
   // ステージ3はジョジョアイキャッチ、それ以外は通常アイキャッチ
   showEyecatch(id, stage, ()=>{
     loadStageUI(id);
@@ -315,7 +316,7 @@ function tryStartJojoStage(){
 // STAGE EYECATCH
 // ════════════════════════════════════════
 async function showEyecatch(id, stage, onDone){
-  const isJojo = id === 3;
+  const isJojo = id === 4;
   const ov = document.getElementById('eyecatch-overlay');
   const wipe = ov.querySelector('.ec-wipe');
   const stageEl = document.getElementById('ec-stage-num');
@@ -328,7 +329,8 @@ async function showEyecatch(id, stage, onDone){
   const subs = {
     1:'DEADLINE PRESSURE SYSTEM',
     2:'NEGOTIATION WARFARE',
-    3:'SILENCE OF THE BOARDROOM'
+    3:'CRISIS MANAGEMENT',
+    4:'SILENCE OF THE BOARDROOM'
   };
 
   stageEl.textContent = stage.bonus ? 'EXTRA STAGE' : 'STAGE 0'+id;
