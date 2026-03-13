@@ -533,6 +533,54 @@ body.jojo-theme .home-hex-spin{stroke:rgba(255,234,0,.55)!important;}
 .stage-card.unlocked:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(212,175,55,.14),0 0 0 1px rgba(212,175,55,.35)}
 .stage-card.unlocked:active{transform:scale(.985)}
 .stage-card.locked{border:1px solid rgba(255,255,255,.05);cursor:not-allowed;opacity:.45}
+
+/* Stage 3 ジョジョロック */
+@keyframes jojoLockPulse{
+  0%,100%{box-shadow:0 0 8px rgba(212,175,55,.12),inset 0 0 20px rgba(0,0,0,.6);border-color:rgba(212,175,55,.18)}
+  50%{box-shadow:0 0 22px rgba(212,175,55,.35),inset 0 0 20px rgba(0,0,0,.6);border-color:rgba(212,175,55,.5)}
+}
+.stage-card.jojo-locked{
+  border:1px solid rgba(212,175,55,.22);
+  cursor:pointer;
+  background:rgba(3,6,14,.95);
+  animation:jojoLockPulse 2.6s ease-in-out infinite;
+  position:relative;
+  overflow:hidden;
+}
+.stage-card.jojo-locked::after{
+  content:'';
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    135deg,
+    transparent,transparent 6px,
+    rgba(0,0,0,.18) 6px,rgba(0,0,0,.18) 12px
+  );
+  pointer-events:none;
+}
+.stage-card.jojo-locked:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 32px rgba(212,175,55,.45),0 0 0 1px rgba(212,175,55,.5);
+  border-color:rgba(212,175,55,.7);
+  animation:none;
+}
+.jojo-lock-num{color:rgba(212,175,55,.4)!important;}
+.jojo-lock-title{
+  font-size:clamp(22px,6vw,32px)!important;
+  color:rgba(212,175,55,.55)!important;
+  letter-spacing:.3em;
+  text-shadow:0 0 20px rgba(212,175,55,.4);
+}
+.jojo-lock-desc{color:rgba(148,163,184,.45)!important;}
+.jojo-lock-chip{
+  border-color:rgba(212,175,55,.4)!important;
+  color:rgba(212,175,55,.8)!important;
+  background:rgba(212,175,55,.06)!important;
+}
+.jojo-lock-arrow{
+  color:rgba(212,175,55,.5);
+  font-size:11px;letter-spacing:.2em;
+  text-align:right;margin-top:8px;
+}
 /* newly unlocked flash */
 .stage-card.just-unlocked{animation:unlockFlash .8s ease forwards}
 @keyframes unlockFlash{
